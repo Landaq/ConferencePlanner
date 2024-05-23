@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd", "BackEnd\BackEnd.csproj", "{232C1020-1418-49CF-9BB1-F271D5DF524F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConferenceDTO", "ConferenceDTO\ConferenceDTO.csproj", "{1775548B-33F7-44D1-A0A4-AE259C474B2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{232C1020-1418-49CF-9BB1-F271D5DF524F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{232C1020-1418-49CF-9BB1-F271D5DF524F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{232C1020-1418-49CF-9BB1-F271D5DF524F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1775548B-33F7-44D1-A0A4-AE259C474B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1775548B-33F7-44D1-A0A4-AE259C474B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1775548B-33F7-44D1-A0A4-AE259C474B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1775548B-33F7-44D1-A0A4-AE259C474B2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
