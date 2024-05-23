@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BackEnd.Models;
+using BackEnd.Data;
 namespace BackEnd;
 
 public static class SpeakerEndpoints
