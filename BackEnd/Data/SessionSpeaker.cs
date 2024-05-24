@@ -1,6 +1,4 @@
-﻿using ConferenceDTO;
-
-namespace BackEnd.Data;
+﻿namespace BackEnd.Data;
 
 public class SessionSpeaker
 {
