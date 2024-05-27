@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using ConferenceDTO;
+using Microsoft.VisualBasic;
 
 namespace FrontEnd.Services;
 
@@ -95,5 +96,25 @@ public class ApiClient : IApiClient
         var response = await _httpClient.GetAsync($"/api/search/{term}");
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<List<SearchResult>>() ?? new();
+    }
+
+    public async Task AddSessionToAttendeeAsync(string name, int sessionId)
+    {
+        var response = await _httpClient.PostAsync($"/api/Attendee/{name}/Session/{sessionId}", null);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task RemoveSessionFromAttendeeAsync(string name, int sessionId)
+    {
+        var response = await _httpClient.DeleteAsync($"api/Attendee/{name}/Session/{sessionId}");
+        response.EnsureSuccessStatusCode();
+    }
+    public async Task<List<SessionResponse>> GetSessionsByAttendeeAsync(string name)
+    {
+        var response = await _httpClient.GetAsync($"/api/Attendee/{name}/sessions");
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<List<SessionResponse>>();
     }
 }

@@ -26,6 +26,27 @@ public static class AttendeeEndpoints
         .Produces<AttendeeResponse>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);
 
+        routes.MapGet("/api/Attendee/{username}/Sessions",
+        async (string username, ApplicationDbContext db) =>
+        {
+            var sessions = await db.Sessions.AsNoTracking()
+                .Include(s => s.Track)
+                .Include(s => s.SessionSpeakers)
+                    .ThenInclude(ss => ss.Speaker)
+                .Where(s => s.SessionAttendees.Any(sa => sa.Attendee.UserName == username))
+                .Select(m => m.MapSessionResponse())
+                .ToListAsync();
+
+            return sessions is IQueryable<Data.Session>
+                 ? Results.Ok(sessions)
+                 : Results.NotFound();
+
+        })
+        .WithTags("Attendee")
+        .WithName("GetAllSessionsForAttendee")
+        .Produces<List<SessionResponse>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound);
+
         routes.MapPost("/api/Attendee/", async (ConferenceDTO.Attendee input, ApplicationDbContext db) =>
         {
             // Check if the attendee already exists

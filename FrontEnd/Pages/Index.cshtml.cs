@@ -19,6 +19,8 @@ namespace FrontEnd.Pages
 
         protected readonly IApiClient _apiClient;
 
+        public List<int> UserSessions { get; set; } = new List<int>();
+
         public IndexModel(ILogger<IndexModel> logger, IApiClient apiClient)
         {
             _logger = logger;
@@ -28,11 +30,19 @@ namespace FrontEnd.Pages
         public bool IsAdmin { get; set; }
         public async Task OnGet(int day = 0)
         {
-            IsAdmin = User.IsAdmin();
-
             CurrentDayOffset = day;
 
-            var sessions = await _apiClient.GetSessionsAsync();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userSessions = await _apiClient.GetSessionsByAttendeeAsync(User.Identity.Name);
+                UserSessions = userSessions.Select(u => u.Id).ToList();
+            }
+
+
+            var sessions = await GetSessionsAsync();
+
+
 
             var startDate = sessions.Min(s => s.StartTime?.Date);
 
@@ -55,5 +65,23 @@ namespace FrontEnd.Pages
         public IEnumerable<(int Offset, DayOfWeek? DayofWeek)> DayOffsets { get; set; } = null!;
 
         public int CurrentDayOffset { get; set; }
+
+        protected virtual Task<List<SessionResponse>> GetSessionsAsync()
+        {
+            return _apiClient.GetSessionsAsync();
+        }
+        public async Task<IActionResult> OnPostAsync(int sessionId)
+        {
+            await _apiClient.AddSessionToAttendeeAsync(User.Identity.Name, sessionId);
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostRemoveAsync(int sessionId)
+        {
+            await _apiClient.RemoveSessionFromAttendeeAsync(User.Identity.Name, sessionId);
+
+            return RedirectToPage();
+        }
     }
 }

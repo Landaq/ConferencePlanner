@@ -2,12 +2,14 @@ using FrontEnd.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FrontEnd.Data;
+using FrontEnd.Areas.Identity;
+using FrontEnd;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("IdentityDbContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityDbContextConnection' not found.");
 
 builder.Services.AddDbContext<IdentityDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<IdentityDbContext>()
@@ -21,7 +23,6 @@ builder.Services.AddAuthorization(options =>
               .RequireIsAdminClaim();
     });
 });
-
 
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
@@ -50,9 +51,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+app.UseAuthentication(); ;
 
 app.UseAuthorization();
+
+app.UseMiddleware<RequireLoginMiddleware>();
 
 app.MapRazorPages();
 
