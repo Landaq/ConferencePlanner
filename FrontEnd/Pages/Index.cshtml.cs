@@ -2,11 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ConferenceDTO;
+using Microsoft.AspNetCore.Components.Web;
+using System.Security.Claims;
 
 namespace FrontEnd.Pages
 {
     public class IndexModel : PageModel
     {
+
+        [TempData]
+        public string Message { get; set; }
+
+        public bool ShowMessage => !string.IsNullOrEmpty(Message);
+
         private readonly ILogger<IndexModel> _logger;
 
         protected readonly IApiClient _apiClient;
@@ -17,8 +25,11 @@ namespace FrontEnd.Pages
             _apiClient = apiClient;
         }
 
+        public bool IsAdmin { get; set; }
         public async Task OnGet(int day = 0)
         {
+            IsAdmin = User.IsAdmin();
+
             CurrentDayOffset = day;
 
             var sessions = await _apiClient.GetSessionsAsync();

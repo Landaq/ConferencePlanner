@@ -59,7 +59,7 @@ public class ApiClient : IApiClient
 
     public async Task DeleteSessionAsync(int id)
     {
-        var response = await _httpClient.DeleteAsync($"/api/Session/{id}");
+        var response = await _httpClient.DeleteAsync($"/api/Sessions/{id}");
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
             return;

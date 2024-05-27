@@ -10,10 +10,25 @@ builder.Services.AddDbContext<IdentityDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<IdentityDbContext>();
+    .AddEntityFrameworkStores<IdentityDbContext>()
+    .AddClaimsPrincipalFactory<ClaimsPrincipalFactory>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireAuthenticatedUser()
+              .RequireIsAdminClaim();
+    });
+});
+
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/Admin", "Admin");
+});
+
 builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["serviceUrl"]);
