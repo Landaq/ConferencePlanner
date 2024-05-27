@@ -96,4 +96,26 @@ public class ApiClient : IApiClient
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<List<SearchResult>>() ?? new();
     }
+    public async Task AddSessionToAttendeeAsync(string name, int sessionId)
+    {
+        var response = await _httpClient.PostAsync($"/api/attendee/{name}/session/{sessionId}", null);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task RemoveSessionFromAttendeeAsync(string name, int sessionId)
+    {
+        var response = await _httpClient.DeleteAsync($"/api/attendee/{name}/session/{sessionId}");
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<List<SessionResponse>> GetSessionsByAttendeeAsync(string name)
+    {
+        var response = await _httpClient.GetAsync($"/api/attendee/{name}/sessions");
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<List<SessionResponse>>();
+    }
 }

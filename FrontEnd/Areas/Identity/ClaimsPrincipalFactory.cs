@@ -13,14 +13,22 @@ public class ClaimsPrincipalFactory : UserClaimsPrincipalFactory<User>
     {
         _apiClient = apiClient;
     }
+
     protected override async Task<ClaimsIdentity> GenerateClaimsAsync(User user)
     {
-        var identiy = await base.GenerateClaimsAsync(user);
+        var identity = await base.GenerateClaimsAsync(user);
 
         if (user.IsAdmin)
         {
-            identiy.MakeAdmin();
+            identity.MakeAdmin();
         }
-        return identiy;
+
+        var attendee = await _apiClient.GetAttendeeAsync(user.UserName);
+        if (attendee != null)
+        {
+            identity.MakeAttendee();
+        }
+
+        return identity;
     }
 }
