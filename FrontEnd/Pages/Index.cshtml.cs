@@ -70,6 +70,7 @@ namespace FrontEnd.Pages
         {
             return _apiClient.GetSessionsAsync();
         }
+
         public async Task<IActionResult> OnPostAsync(int sessionId)
         {
             await _apiClient.AddSessionToAttendeeAsync(User.Identity.Name, sessionId);
